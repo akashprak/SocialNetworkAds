@@ -1,0 +1,7 @@
+mlruns/
+.vscode/
+__pycache__/
+.Python
+
+# Jupyter Notebook
+.ipynb_checkpoints
