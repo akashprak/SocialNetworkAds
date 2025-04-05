@@ -1,7 +1,7 @@
 ### Social Network Ads - Performance Prediction
 ## Project Overview
 The project implements __Decision tree__,  __bagging__ and __boosting__ models to predict whether a user purchases a product after viewing its social network Ad.  
-MLflow is used to handle the machine learning workflow. Options for python command line interface is provided to select which model to train.
+MLflow is used to handle the machine learning workflow. Options for python command line interface is provided to select which model to train and providing its hyperparameters.
 
 ## Dataset Information
 ### columns
@@ -20,12 +20,16 @@ Dataset: https://www.kaggle.com/datasets/shub99/social-network-ads
 2. __Preprocessing__ : Missing values are imputed using the train data median.
 3. __Model Training__ : _Decision Tree_, _Random Forest_ and _XGBoost_ are confiugred to be trained on the data with hyperparameter tuning using _GridSearchCV_
 4. __MLflow__ : MLflow is used for experiment tracking. The trained model, preprocessor, paramters and metrics are logged.
-5. __argparse__ : `argparse` is used to write a command line interface for the project in which options are enabled to specify which model to train and the path to the dataset.
+5. __argparse__ : `argparse` is used to write a command line interface for the project in which options are enabled to specify which model to train, hyperparameters and the path to the dataset.
 
 ### Command line argument flags
-- `--model` , `-m` : This flag is used to specify which model to train. It is not case sensitive.  
-                    Allowed values: `decisiontree`, `randomforest`, `xgboost`
 - `--path` , `-p` : (Optional). specify path or URL, else default path.
+- `--auto` : This flag is used to specify which model to train. Automatically tunes the hyperparameters. It is not case sensitive.  
+            Allowed values: `decisiontree`, `randomforest`, `xgboost`
+
+The models can also be specified as subcommands, allowing their hyperparameters to be defined using the corresponding flags  
+
+- __subcommands__ : [`decisiontree`, `randomforest`, `xgboost`] (case sensitive)
 
 ## Dependencies
 - `pandas`
@@ -42,13 +46,19 @@ Dataset: https://www.kaggle.com/datasets/shub99/social-network-ads
 pip install pandas numpy seaborn matplotlib xgboost scikit-learn mlflow
 ```
 
-### Training Model
+### Training Models
 ```
-python main.py --model DecisionTree
+python main.py --auto DecisionTree
 
-python main.py --model RandomForest
+python main.py --auto RandomForest
 
-python main.py --model XGBoost
+python main.py --auto XGBoost
+
+python main.py randomforest
+
+python main.py xgboost --learning_rate 0.1 --max_depth 5 -n 200
+
+python main.py decisiontree -c entropy -s 3 -d
 ```
 
 ### MLflow
