@@ -22,7 +22,7 @@ if __name__=="__main__":
     parser_rf.add_argument("--max_features", "-m", type=int, nargs="?", const=None)
 
     parser_xgb = subparser.add_parser("xgboost")
-    parser_xgb.add_argument("--learning_rate", "l", type=float, default=0.3)
+    parser_xgb.add_argument("--learning_rate", "-l", type=float, default=0.3)
     parser_xgb.add_argument("--max_depth", "-d", type=int, default=6)
     parser_xgb.add_argument("--n_estimators", "-n", type=int, default=100)
 
@@ -60,6 +60,6 @@ if __name__=="__main__":
         }
 
     try:
-        run_pipeline(data_uri=args.path, model_name=args.model)
+        run_pipeline(data_uri=args.path, model_name=model_name, params=params)
     except Exception as e:
         raise e
