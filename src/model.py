@@ -1,5 +1,4 @@
 import pandas as pd
-from dataclasses import dataclass
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import train_test_split
 from sklearn.impute import SimpleImputer
@@ -7,26 +6,6 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV
 from xgboost import XGBClassifier
-
-@dataclass
-class ModelConfig:
-    DT_params = {
-        "criterion" : ["gini", "entropy"],
-        "max_depth" : [None, 2, 5],
-        "min_samples_split" : [2, 4, 6]
-    }
-    random_Forest_params = {
-        "n_estimators" : [100, 200],
-        "criterion" : ["gini", "entropy"],
-        "max_depth" : [None, 3, 5],
-        "min_samples_split" : [2, 4, 6],
-        "max_features" : [None]
-    }
-    xgboost_params = {
-        "learning_rate" : [1, 0.1, 0.01],
-        "max_depth" : [2, 5, 7],
-        "n_estimators" : [100, 150, 200]
-    }
 
 class DataIngestion:
     def data_ingestion(self, URI):
@@ -63,25 +42,19 @@ class Preprocessor:
     
 
 class ModelTrainer:
-    def __init__(self):
-        self.model_config = ModelConfig()
-
-    def train_model(self, model_name:str, X_train, y_train):
+    def train_model(self, model_name:str,  params:dict, X_train, y_train):
         """
-        Trains the model for which the model_name is provided, trains XGBoost by default.
+        Trains the model for which the model_name is provided on the given parameters with cross validation.
         returns best model, best params
         Returns: {model: best_model, params: best_params)
         """
-        model_name = str(model_name).lower()        # enabling case insensitivity
+
         if model_name=='decisiontree':
             model = DecisionTreeClassifier(random_state=34)
-            params = self.model_config.DT_params
         elif model_name=='randomforest':
             model = RandomForestClassifier(random_state=34, verbose=1)
-            params = self.model_config.random_Forest_params
         elif model_name=='xgboost':
             model = XGBClassifier(objective='binary:logistic', random_state=34, verbosity=1)
-            params = self.model_config.xgboost_params
         else:
             raise ValueError("Incorrect value provided as model name.")
         
